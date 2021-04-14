@@ -10,11 +10,12 @@ tools:ignore="ExtraText">
 <TextView
     android:id="@+id/topBar"
     android:layout_width="match_parent"
-    android:layout_height="30dp"
+    android:layout_height="25dp"
     app:layout_constraintTop_toTopOf="parent"
     android:background="#506497"
-    android:text="   Chatbot"
-    android:textSize="22sp"
+    android:paddingLeft="10dp"
+    android:text="Chatbot"
+    android:textSize="18sp"
     android:textColor="#FFFFFF" />
 
 <androidx.recyclerview.widget.RecyclerView
@@ -39,16 +40,28 @@ tools:ignore="ExtraText">
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent">
 
+    <ImageButton
+        android:id="@+id/audioButton"
+        android:layout_width="0dp"
+        android:layout_weight=".5"
+        android:layout_height="25dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_gravity="center"
+        android:textSize="9sp"
+        android:background="@drawable/audio_record_button" />
+
     <EditText
         android:id="@+id/inputBar"
         android:layout_width="0dp"
         android:layout_weight="8"
         android:layout_height="wrap_content"
         android:maxLines="5"
-        android:layout_marginLeft="15dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:background="@drawable/rounded_rectangle"
         android:layout_gravity="center"
         android:hint=" Type your question here... "
@@ -60,9 +73,8 @@ tools:ignore="ExtraText">
         android:layout_weight=".5"
         android:layout_height="25dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginRight="10dp"
         android:layout_gravity="center"
-        android:textColor="#386E6C"
         android:textSize="9sp"
         android:background="@drawable/send_button" />
 

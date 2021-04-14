@@ -3,6 +3,7 @@ package com.example.hkucsambassador.ui
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hkucsambassador.R
 import com.example.hkucsambassador.api.Api
@@ -184,10 +186,16 @@ class MessageAdapter(val context: Context, val mLayoutManager: RecyclerView): Re
                 .build()
                 .create(Api::class.java)
 
+        val deviceID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID)
+        Log.d("TAG", "ID:" + deviceID)
         val jsonObject = JSONObject()
-        jsonObject.put("session_id", "tester")
+        if (deviceID == null) {
+            jsonObject.put("session_id", "tester")
+        }
+        else{
+            jsonObject.put("session_id", deviceID)
+        }
         jsonObject.put("text", str)
-        //session id see https://stackoverflow.com/questions/2245545/accessing-google-account-id-username-via-android
 
         val jsonObjectString = jsonObject.toString()
         val requestBody = jsonObjectString.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
@@ -230,17 +238,20 @@ class MessageAdapter(val context: Context, val mLayoutManager: RecyclerView): Re
                             else -> {
                                 Log.d("TAG", "cards")
                                 var cards = messageObj.getJSONArray("cards")
+                                var count = cards.length()
                                 for (c in 0 until cards.length()){
                                     var m = Message(cards.getJSONObject(c).getString("title"), "cardInfo", cards.getJSONObject(c).getString("subtitle"), cards.getJSONObject(c).getString("image_url"))
                                     insertMessage(m)
 
                                     var cardButtons = cards.getJSONObject(c).getJSONArray("buttons")
+                                    count += cardButtons.length()
                                     for (b in 0 until cardButtons.length()){
                                         var m = Message(cardButtons.getJSONObject(b).getString("title"), "cardButton", cardButtons.getJSONObject(b).getString("type"), cardButtons.getJSONObject(b).getString("value"))
                                         insertMessage(m)
                                     }
                                 }
-                                mLayoutManager.scrollToPosition(itemCount - 1)
+                                //mLayoutManager.scrollToPosition(itemCount - 1)
+                                (mLayoutManager.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(itemCount-1-count, 0)
                             }
                         }
                     }

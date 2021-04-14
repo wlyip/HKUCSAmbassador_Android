@@ -1,5 +1,6 @@
 package com.example.hkucsambassador.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +17,8 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import retrofit2.Retrofit
+import android.provider.Settings.Secure
+import java.security.AccessController.getContext
 
 class ChatActivity : AppCompatActivity()  {
     private lateinit var adapter: MessageAdapter
@@ -54,10 +57,16 @@ class ChatActivity : AppCompatActivity()  {
                 .build()
                 .create(Api::class.java)
 
+        val deviceID = Secure.getString(getContentResolver(), Secure.ANDROID_ID)
+        Log.d("TAG", "ID:" + deviceID)
         val jsonObject = JSONObject()
-        jsonObject.put("session_id", "tester")
+        if (deviceID == null) {
+            jsonObject.put("session_id", "tester")
+        }
+        else{
+            jsonObject.put("session_id", deviceID)
+        }
         jsonObject.put("text", str)
-        //session id see https://stackoverflow.com/questions/2245545/accessing-google-account-id-username-via-android
 
         val jsonObjectString = jsonObject.toString()
         val requestBody = jsonObjectString.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
@@ -100,17 +109,20 @@ class ChatActivity : AppCompatActivity()  {
                             else -> {
                                 Log.d("TAG", "cards")
                                 var cards = messageObj.getJSONArray("cards")
+                                var count = cards.length()
                                 for (c in 0 until cards.length()){
                                     var m = Message(cards.getJSONObject(c).getString("title"), "cardInfo", cards.getJSONObject(c).getString("subtitle"), cards.getJSONObject(c).getString("image_url"))
                                     adapter.insertMessage(m)
 
                                     var cardButtons = cards.getJSONObject(c).getJSONArray("buttons")
+                                    count += cardButtons.length()
                                     for (b in 0 until cardButtons.length()){
                                         var m = Message(cardButtons.getJSONObject(b).getString("title"), "cardButton", cardButtons.getJSONObject(b).getString("type"), cardButtons.getJSONObject(b).getString("value"))
                                         adapter.insertMessage(m)
                                     }
                                 }
-                                recyclerview_messages.scrollToPosition(adapter.itemCount - 1)
+                                (recyclerview_messages.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(adapter.itemCount-1-count, 0)
+
                             }
                         }
                     }
