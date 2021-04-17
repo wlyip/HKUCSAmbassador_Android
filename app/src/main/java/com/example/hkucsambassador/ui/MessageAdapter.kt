@@ -86,7 +86,9 @@ class MessageAdapter(val context: Context, val mLayoutManager: RecyclerView): Re
         override fun bind(message: Message) {
             title.text = message.message.replace("<br>", "\r")
             subtitle.text = message.type.replace("<br>", "\r")
-            Picasso.get().load(message.value).into(img)
+            if(message.value != ""){
+                Picasso.get().load(message.value).into(img)
+            }
         }
     }
 

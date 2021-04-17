@@ -27,51 +27,24 @@ import androidx.core.content.ContextCompat
 import java.io.IOException
 import java.security.AccessController.getContext
 
-class ChatActivity : AppCompatActivity()  {
+class TestActivity : AppCompatActivity()  {
     private lateinit var adapter: MessageAdapter
-    private var output: String? = null
+    /*private var output: String? = null
     private var recorder: MediaRecorder? = null
-    private var recordState: Boolean = false
+    private var recordState: Boolean = false*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_chat)
+        setContentView(R.layout.activity_test)
 
         recyclerview_messages.layoutManager = LinearLayoutManager(this)
         adapter = MessageAdapter(this, recyclerview_messages)
         recyclerview_messages.adapter = adapter
 
-        getApi("init")
+        getApi("altitude_test")
 
         clickOnSubmit()
-
-        //clickOnRecord()
     }
-
-    /*private fun clickOnRecord(){
-        recordButton.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                val permissions = arrayOf(android.Manifest.permission.RECORD_AUDIO, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                ActivityCompat.requestPermissions(this, permissions,0)
-            } else {
-                try {
-                    recorder?.prepare()
-                    recorder?.start()
-                    recordState = true
-                    Toast.makeText(this, "Recording started!", Toast.LENGTH_SHORT).show()
-                } catch (e: IllegalStateException) {
-                    e.printStackTrace()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-
-
-
-            }
-        }
-    }*/
 
     private fun clickOnSubmit() {
         submitButton.setOnClickListener {

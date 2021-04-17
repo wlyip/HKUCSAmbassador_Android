@@ -26,26 +26,28 @@
         android:textColor="#FFFFFF" />
 
     <Button
-        android:id="@+id/csHomepageButton"
+        android:id="@+id/testButton"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         app:layout_constraintTop_toBottomOf="@+id/chatButton"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="10dp"
-        android:backgroundTint="#6383A4"
-        android:text="HKUCS Homepage"
+        android:backgroundTint="#518C8C"
+        android:text="Altitude test"
         android:textSize="22sp"
         android:textColor="#FFFFFF" />
 
     <Button
-        android:id="@+id/otherViewButton"
+        android:id="@+id/csHomepageButton"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        app:layout_constraintTop_toBottomOf="@+id/csHomepageButton"
+        app:layout_constraintTop_toBottomOf="@+id/testButton"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="10dp"
-        android:backgroundTint="#6383A4"
-        android:text="Others"
+        android:backgroundTint="#73899F"
+        android:text="HKUCS Homepage"
         android:textSize="22sp"
         android:textColor="#FFFFFF" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

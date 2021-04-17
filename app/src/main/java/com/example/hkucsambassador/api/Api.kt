@@ -12,4 +12,7 @@ interface Api {
     @POST("/webhook")
     suspend fun getMessage(@Body requestBody: RequestBody): Response<ResponseBody>
 
+    //@POST("/stt_binary?access_token=cs-ambassador")
+    //suspend fun getSTT(@Body requestBody: RequestBody): Response<ResponseBody>
+
 }

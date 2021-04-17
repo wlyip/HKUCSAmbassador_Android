@@ -17,6 +17,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, ChatActivity::class.java))
         }
 
+        testButton.setOnClickListener{
+            startActivity(Intent(this, TestActivity::class.java))
+        }
+
         csHomepageButton.setOnClickListener {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.cs.hku.hk/")))
         }
