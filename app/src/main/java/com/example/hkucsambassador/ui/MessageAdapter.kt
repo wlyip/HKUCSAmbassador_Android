@@ -238,6 +238,9 @@ class MessageAdapter(val context: Context, val mLayoutManager: RecyclerView): Re
 
                     val responseString = response.body()?.string()
                     val result = JSONObject(responseString)
+                    val speech = result.getString("Speech")
+                    insertMessage(Message(speech, "audio", "", ""))
+
                     val resultMessage = result.getJSONArray("messages")
                     val messageNum = resultMessage.length()
 
