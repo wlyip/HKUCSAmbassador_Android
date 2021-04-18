@@ -41,7 +41,7 @@ class TestActivity : AppCompatActivity()  {
         adapter = MessageAdapter(this, recyclerview_messages)
         recyclerview_messages.adapter = adapter
 
-        getApi("altitude_test")
+        getApi("aptitude_test")
 
         clickOnSubmit()
     }
@@ -62,7 +62,7 @@ class TestActivity : AppCompatActivity()  {
     private fun getApi(str: String) {
 
         val api = Retrofit.Builder()
-                .baseUrl("http://cs-chatbot.eastasia.cloudapp.azure.com:5001")
+                .baseUrl("https://cs-ambassador.herokuapp.com")
                 .build()
                 .create(Api::class.java)
 

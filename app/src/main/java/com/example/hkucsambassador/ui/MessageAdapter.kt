@@ -2,6 +2,8 @@ package com.example.hkucsambassador.ui
 
 import android.content.Context
 import android.content.Intent
+import android.media.AudioManager
+import android.media.MediaPlayer
 import android.net.Uri
 import android.provider.Settings
 import android.util.Log
@@ -17,7 +19,6 @@ import com.example.hkucsambassador.R
 import com.example.hkucsambassador.api.Api
 import com.example.hkucsambassador.data.Message
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,6 +27,9 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import retrofit2.Retrofit
+import java.io.FileInputStream
+import java.io.IOException
+
 
 class MessageAdapter(val context: Context, val mLayoutManager: RecyclerView): RecyclerView.Adapter<MessageAdapter.MessageViewHolder>() {
 
@@ -117,6 +121,18 @@ class MessageAdapter(val context: Context, val mLayoutManager: RecyclerView): Re
         }
     }
 
+    inner class AudioMessageViewHolder(itemView: View) : MessageViewHolder(itemView) {
+        private var audioButton: Button = itemView.findViewById(R.id.audioButton)
+
+        override fun bind(message: Message){
+            audioButton.setOnClickListener {
+                run {
+                    getTtsApi(message.message)
+                }
+            }
+        }
+    }
+
     fun insertMessage(message:Message){
         listOfMessages.add(message)
         notifyDataSetChanged()
@@ -143,9 +159,14 @@ class MessageAdapter(val context: Context, val mLayoutManager: RecyclerView): Re
                     LayoutInflater.from(parent.context).inflate(R.layout.bot_card_info, parent, false)
             )
         }
-        else {
+        else if (viewType == 5) {
             CardButtonMessageViewHolder(
                     LayoutInflater.from(parent.context).inflate(R.layout.bot_card_button, parent, false)
+            )
+        }
+        else {
+            AudioMessageViewHolder(
+                    LayoutInflater.from(parent.context).inflate(R.layout.audio_button, parent, false)
             )
         }
     }
@@ -169,8 +190,11 @@ class MessageAdapter(val context: Context, val mLayoutManager: RecyclerView): Re
         else if (m.sender == "cardInfo"){
             4
         }
-        else{
+        else if (m.sender == "cardButton"){
             5
+        }
+        else{
+            6
         }
     }
 
@@ -259,11 +283,51 @@ class MessageAdapter(val context: Context, val mLayoutManager: RecyclerView): Re
                     }
 
                 } else {
-
                     Log.e("Error", response.code().toString())
-
                 }
             }
+        }
+    }
+
+    private fun getTtsApi(str: String){
+        val speechText = str
+        val api = Retrofit.Builder()
+                .baseUrl("https://cs-ambassador.herokuapp.com")
+                .build()
+                .create(Api::class.java)
+        val jsonObject = JSONObject()
+        jsonObject.put("text", speechText)
+        val jsonObjectString = jsonObject.toString()
+        val requestBody = jsonObjectString.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
+        Log.d("jsonObjectString", jsonObjectString)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = api.getTTS(requestBody)
+
+            withContext(Dispatchers.Main) {
+                if (response.isSuccessful) {
+                    val responseString = response.body()?.string()
+                    val result = JSONObject(responseString)
+                    val speechUrl = result.getString("data")
+                    Log.d("speechUrl", speechUrl)
+                    getSpeech(speechUrl)
+                }
+                else {
+                    Log.e("Error", "")
+                }
+            }
+        }
+    }
+
+    private fun getSpeech(str: String){
+        var mp: MediaPlayer = MediaPlayer()
+        try {
+            mp.setDataSource(str.replace("http://", "https://"))
+            mp.prepare()
+            mp.start()
+        } catch (e: IOException) {
+            Log.d("error", "")
+            e.printStackTrace()
         }
     }
 

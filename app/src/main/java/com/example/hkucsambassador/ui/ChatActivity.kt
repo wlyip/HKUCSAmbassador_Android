@@ -29,9 +29,9 @@ import java.security.AccessController.getContext
 
 class ChatActivity : AppCompatActivity()  {
     private lateinit var adapter: MessageAdapter
-    private var output: String? = null
+    /*private var output: String? = null
     private var recorder: MediaRecorder? = null
-    private var recordState: Boolean = false
+    private var recordState: Boolean = false*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,9 +66,6 @@ class ChatActivity : AppCompatActivity()  {
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
-
-
-
             }
         }
     }*/
@@ -89,7 +86,7 @@ class ChatActivity : AppCompatActivity()  {
     private fun getApi(str: String) {
 
         val api = Retrofit.Builder()
-                .baseUrl("http://cs-chatbot.eastasia.cloudapp.azure.com:5001")
+                .baseUrl("https://cs-ambassador.herokuapp.com")
                 .build()
                 .create(Api::class.java)
 
@@ -116,6 +113,9 @@ class ChatActivity : AppCompatActivity()  {
 
                     val responseString = response.body()?.string()
                     val result = JSONObject(responseString)
+                    val speech = result.getString("Speech")
+                    adapter.insertMessage(Message(speech, "audio", "", ""))
+
                     val resultMessage = result.getJSONArray("messages")
                     val messageNum = resultMessage.length()
 

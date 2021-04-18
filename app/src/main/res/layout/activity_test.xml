@@ -14,7 +14,7 @@ tools:ignore="ExtraText">
     app:layout_constraintTop_toTopOf="parent"
     android:background="#3E9595"
     android:paddingLeft="10dp"
-    android:text="Altitude Test"
+    android:text="Aptitude Test"
     android:textSize="18sp"
     android:textColor="#FFFFFF" />
 

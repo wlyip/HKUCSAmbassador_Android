@@ -15,4 +15,7 @@ interface Api {
     //@POST("/stt_binary?access_token=cs-ambassador")
     //suspend fun getSTT(@Body requestBody: RequestBody): Response<ResponseBody>
 
+    @POST("/tts?access_token=cs-ambassador")
+    suspend fun getTTS(@Body requestBody: RequestBody): Response<ResponseBody>
+
 }
