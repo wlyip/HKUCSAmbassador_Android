@@ -29,9 +29,6 @@ import java.security.AccessController.getContext
 
 class ChatActivity : AppCompatActivity()  {
     private lateinit var adapter: MessageAdapter
-    /*private var output: String? = null
-    private var recorder: MediaRecorder? = null
-    private var recordState: Boolean = false*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,31 +41,7 @@ class ChatActivity : AppCompatActivity()  {
         getApi("init")
 
         clickOnSubmit()
-
-        //clickOnRecord()
     }
-
-    /*private fun clickOnRecord(){
-        recordButton.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                val permissions = arrayOf(android.Manifest.permission.RECORD_AUDIO, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                ActivityCompat.requestPermissions(this, permissions,0)
-            } else {
-                try {
-                    recorder?.prepare()
-                    recorder?.start()
-                    recordState = true
-                    Toast.makeText(this, "Recording started!", Toast.LENGTH_SHORT).show()
-                } catch (e: IllegalStateException) {
-                    e.printStackTrace()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-        }
-    }*/
 
     private fun clickOnSubmit() {
         submitButton.setOnClickListener {

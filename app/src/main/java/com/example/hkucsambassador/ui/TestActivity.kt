@@ -29,9 +29,6 @@ import java.security.AccessController.getContext
 
 class TestActivity : AppCompatActivity()  {
     private lateinit var adapter: MessageAdapter
-    /*private var output: String? = null
-    private var recorder: MediaRecorder? = null
-    private var recordState: Boolean = false*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
