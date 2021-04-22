@@ -33,7 +33,7 @@ import java.io.IOException
 
 class MessageAdapter(val context: Context, val mLayoutManager: RecyclerView): RecyclerView.Adapter<MessageAdapter.MessageViewHolder>() {
 
-    private var listOfMessages = mutableListOf<Message>()
+    var listOfMessages = mutableListOf<Message>()
 
     open inner class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         open fun bind(message: Message){
@@ -270,21 +270,28 @@ class MessageAdapter(val context: Context, val mLayoutManager: RecyclerView): Re
                             }
                             else -> {
                                 Log.d("TAG", "cards")
+                                val initCount = itemCount
+                                var count = initCount
+                                loop@ for (i in 0 until initCount){
+                                    if (listOfMessages[itemCount - i - 1].sender == "user") {
+                                        count = itemCount - i - 1
+                                        break@loop
+                                    }
+                                }
                                 var cards = messageObj.getJSONArray("cards")
-                                var count = cards.length()
+                                //var count = cards.length()
                                 for (c in 0 until cards.length()){
                                     var m = Message(cards.getJSONObject(c).getString("title"), "cardInfo", cards.getJSONObject(c).getString("subtitle"), cards.getJSONObject(c).getString("image_url"))
                                     insertMessage(m)
 
                                     var cardButtons = cards.getJSONObject(c).getJSONArray("buttons")
-                                    count += cardButtons.length()
+                                    //count += cardButtons.length()
                                     for (b in 0 until cardButtons.length()){
                                         var m = Message(cardButtons.getJSONObject(b).getString("title"), "cardButton", cardButtons.getJSONObject(b).getString("type"), cardButtons.getJSONObject(b).getString("value"))
                                         insertMessage(m)
                                     }
                                 }
-                                //mLayoutManager.scrollToPosition(itemCount - 1)
-                                (mLayoutManager.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(itemCount-1-count, 0)
+                                (mLayoutManager.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(count, 0)
                             }
                         }
                     }
